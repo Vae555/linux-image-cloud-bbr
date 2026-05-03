@@ -39,7 +39,7 @@ jobs:
 
   build:
     needs: check
-    if: '!needs.check.outputs.hit'
+    if: github.event_name == 'workflow_dispatch' || !needs.check.outputs.hit
     runs-on: ubuntu-latest
     container: ghcr.io/waterlemons2k/linux-deps:buster
     steps:
@@ -59,7 +59,16 @@ jobs:
         run: apt-get update && apt-get install -y dwarves
 
       - name: Build
-        run: make -j$(nproc) LOCALVERSION= bindeb-pkg
+        run: |
+          make olddefconfig
+          scripts/config --enable CONFIG_DEBUG_INFO
+          scripts/config --enable CONFIG_DEBUG_INFO_BTF
+          scripts/config --disable CONFIG_DEBUG_INFO_REDUCED
+          scripts/config --disable CONFIG_DEBUG_INFO_SPLIT
+          scripts/config --enable CONFIG_NET_SCH_INGRESS
+          make olddefconfig
+
+          make -j$(nproc) LOCALVERSION= bindeb-pkg
 
       - name: Release
         uses: softprops/action-gh-release@v3
