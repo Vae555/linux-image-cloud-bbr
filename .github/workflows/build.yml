@@ -41,7 +41,7 @@ jobs:
     needs: check
     if: github.event_name == 'workflow_dispatch' || !needs.check.outputs.hit
     runs-on: ubuntu-latest
-    container: ghcr.io/waterlemons2k/linux-deps:bookworm
+    container: ghcr.io/waterlemons2k/linux-deps:buster
     steps:
       - name: Checkout BBR
         uses: actions/checkout@v6
