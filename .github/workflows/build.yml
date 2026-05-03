@@ -54,6 +54,9 @@ jobs:
 
           echo "TAG=$(make kernelversion)_$(date -I)" >> "$GITHUB_ENV"
 
+      - name: Install pahole for BTF
+        run: apt-get update && apt-get install -y dwarves
+
       - name: Build
         run: make -j$(nproc) LOCALVERSION= bindeb-pkg
 
