@@ -48,6 +48,11 @@ jobs:
         with:
           repository: ${{ env.BBR_REPO }}
           ref: ${{ env.BBR_BRANCH }}
+          
+      - name: Install essential tools
+        run: |
+          apt-get update
+          apt-get install -y curl make ca-certificates
 
       - name: Fetch certs and configs
         run: |
