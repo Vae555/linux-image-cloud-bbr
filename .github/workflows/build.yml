@@ -52,16 +52,12 @@ jobs:
       - name: Install essential tools and dependencies
         run: |
           apt-get update
-          apt-get install -y curl make build-essential ca-certificates libncurses-dev bison flex libssl-dev libelf-dev dwarves bc rsync cpio git
+          apt-get install -y curl make build-essential ca-certificates libncurses-dev bison flex libssl-dev libelf-dev dwarves bc rsync cpio git debhelper kmod python3
 
       - name: Fetch certs and configs
         run: |
           curl -fLO https://github.com/${{ github.repository }}/raw/${{ github.sha }}/{certs/debian-uefi-certs.pem,configs/.config}
-
           echo "TAG=$(make kernelversion)_$(date -I)" >> "$GITHUB_ENV"
-
-      - name: Install pahole for BTF
-        run: apt-get update && apt-get install -y dwarves
 
       - name: Build
         run: |
