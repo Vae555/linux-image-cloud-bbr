@@ -41,7 +41,7 @@ jobs:
     needs: check
     if: github.event_name == 'workflow_dispatch' || !needs.check.outputs.hit
     runs-on: ubuntu-latest
-    container: ghcr.io/waterlemons2k/linux-deps:buster
+    container: ghcr.io/waterlemons2k/linux-deps:bookworm
     steps:
       - name: Checkout BBR
         uses: actions/checkout@v6
@@ -61,11 +61,16 @@ jobs:
       - name: Build
         run: |
           make olddefconfig
-          scripts/config --enable CONFIG_DEBUG_INFO
-          scripts/config --enable CONFIG_DEBUG_INFO_BTF
+          
+          scripts/config --disable CONFIG_DEBUG_INFO_NONE
           scripts/config --disable CONFIG_DEBUG_INFO_REDUCED
           scripts/config --disable CONFIG_DEBUG_INFO_SPLIT
+          
+          scripts/config --enable CONFIG_DEBUG_INFO
+          scripts/config --enable CONFIG_DEBUG_INFO_BTF
           scripts/config --enable CONFIG_NET_SCH_INGRESS
+          scripts/config --enable CONFIG_NET_CLS_ACT
+          
           make olddefconfig
 
           make -j$(nproc) LOCALVERSION= bindeb-pkg
