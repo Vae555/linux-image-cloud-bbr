@@ -49,10 +49,10 @@ jobs:
           repository: ${{ env.BBR_REPO }}
           ref: ${{ env.BBR_BRANCH }}
           
-      - name: Install essential tools
+      - name: Install essential tools and dependencies
         run: |
           apt-get update
-          apt-get install -y curl make ca-certificates
+          apt-get install -y curl make build-essential ca-certificates libncurses-dev bison flex libssl-dev libelf-dev dwarves bc rsync cpio git
 
       - name: Fetch certs and configs
         run: |
